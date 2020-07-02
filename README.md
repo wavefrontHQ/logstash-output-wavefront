@@ -1,29 +1,75 @@
 # Wavefront Logstash Output Plugin
-Fully free and fully open source. The license is Apache 2.0, meaning you are pretty much free to use it however you want.
+The Wavefront output plugin for Logstash enables sending Logstash event metrics to Wavefront.
 
-## Contributing
-All contributions are welcome: ideas, patches, documentation, bug reports, complaints, and even something you drew up on a napkin.
-
-## Developing
-To better understand contributing to logstash plugins, visit [their article on custom output plugins](https://www.elastic.co/guide/en/logstash/current/_how_to_write_a_logstash_output_plugin.html).
-
-To test a local build of this plugin,
-
-   1. Install logstash. Either from source or from a package manager is fine.
-   1. Install ruby bundler -- `gem install bundler` should do it.
-   1. In this directory, `gem build logstash-output-wavefront.gemspec`
-   1. `logstash-plugin install *wavefront*.gem`
-
-### Install dependencies
+# Setup
+Install Wavefront Logstash Output Plugin
 ```
-bundle install
+gem install logstash-output-wavefront
+```
+# Enable
+Enable Wavefront Output plugin for Logstash
+```
+output {
+    wavefront {
+      host => "<Proxy-IP>"
+    }
+}
+```
+#### Optional Configuration
+```
+  port          Metric Port (Default - 2878)
+  prefix        Metric Prefix (Default - "logstash")
+  metrics       List of metrics (Default - ["count", "mean"])
+  source        Metric source (Default - Hostname of the node running logstash)  
+```
+# Event Formate
+Wavefront output plugin for Logstash can only process the event as metric which is in below formate
+```
+{
+   "bytes" => {
+     "count" => 200,
+     "mean" => 42.2
+   },
+   "error" => {
+     "count" => 123,
+     "code" => 404
+   },
+   "message" => "I'm not a hash type, so I won't get sent."
+ }
+```
+Wavefront output plugin for Logstash generate below metrics out of the above event and sends to Wavefront
+```
+logstash.bytes.count 200
+logstash.bytes.mean 42.2
+logstash.error.count 123
+```
+Wavefront output plugin for Logstash also supports sending point tags for a metric, below is the event formate
+```
+{
+   "bytes.tagz.type=access.region=mumbai" => {
+     "count" => 200,
+     "mean" => 42.2
+   },
+   "error" => {
+     "count" => 123,
+     "code" => 404
+   },
+   "message" => "I'm not a hash type, so I won't get sent."
+ }
+```
+Below metrics are the output of the above event
+```
+logstash.bytes.count 200 type=access region=mumbai
+logstash.bytes.mean 42.2 type=access region=mumbai
+logstash.error.count 123
 ```
 
-### Test
-```
-bundle exec rspec
-```
+**Note:** Wavefront output plugin for Logstash has dropped out the `logstash.error.code` metric, as default `metrics` list only includes `count and mean`, to include the `code` metric you have to override the default `metrics` to `["count", "mean", "code"]`.
 
-## Need Help?
+## License
+[Apache 2.0 License](LICENSE).
 
-support@wavefront.com
+## How to Contribute
+
+* Reach out to us on our public [Slack channel](https://www.wavefront.com/join-public-slack).
+* If you run into any issues, let us know by creating a GitHub issue.

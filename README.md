@@ -73,7 +73,7 @@ Start logstash and specify the configuration file with the -f flag.
 bin/logstash -f <config-file>
 ```
 
-## Install from source
+# Install from Source
 To Install from source follow the below steps: 
    1. Install ruby.
    2. Install ruby bundler -- `gem install bundler`.
@@ -81,10 +81,10 @@ To Install from source follow the below steps:
    4. Build the plugin -- `gem build logstash-output-wavefront.gemspec`.
    5. Install the plugin --`logstash-plugin install *wavefront*.gem`.
 
-## License
+# License
 [Apache 2.0 License](LICENSE).
 
-## How to Contribute
+# How to Contribute
 
 * Reach out to us on our public [Slack channel](https://www.wavefront.com/join-public-slack).
 * If you run into any issues, let us know by creating a GitHub issue.

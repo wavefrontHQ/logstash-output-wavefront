@@ -1,13 +1,22 @@
 # Wavefront Logstash Output Plugin
 Wavefront Output Plugin for Logstash parse the log data and sends it as metrics to the wavefront.
 
-# Setup
-Install Wavefront Logstash Output Plugin
+# Installation
+### Install from Ruby Gem
 ```
 gem install logstash-output-wavefront
 ```
+
+### Install from Source
+To Install from source follow the below steps:
+   1. Install ruby.
+   2. Install ruby bundler -- `gem install bundler`.
+   3. Clone this repository and `cd` to the directory.
+   4. Build the plugin -- `gem build logstash-output-wavefront.gemspec`.
+   5. Install the plugin --`logstash-plugin install *wavefront*.gem`.
+
 # Enable Output plugin
-Create a config file that specifies `wavefront` as output plugin and settings for other plugins.
+Create/Update a config file that specifies `wavefront` as output plugin
 ```
 output {
     wavefront {
@@ -72,14 +81,6 @@ Start logstash and specify the configuration file with the -f flag.
 ```
 bin/logstash -f <config-file>
 ```
-
-# Install from Source
-To Install from source follow the below steps: 
-   1. Install ruby.
-   2. Install ruby bundler -- `gem install bundler`.
-   3. Clone this repository and `cd` to the directory.
-   4. Build the plugin -- `gem build logstash-output-wavefront.gemspec`.
-   5. Install the plugin --`logstash-plugin install *wavefront*.gem`.
 
 # License
 [Apache 2.0 License](LICENSE).

@@ -1,5 +1,5 @@
 # Wavefront Logstash Output Plugin
-Wavefront Output Plugin for Logstash parse the log data and sends it as metrics to the wavefront.
+Wavefront Output Plugin for Logstash parse the log data and sends it as metrics to the Wavefront.
 
 # Installation
 ### Install from Ruby Gem

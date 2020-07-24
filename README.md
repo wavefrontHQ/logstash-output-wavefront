@@ -16,7 +16,7 @@ To Install from source follow the below steps:
    5. Install the plugin --`logstash-plugin install *wavefront*.gem`.
 
 # Enable Output plugin
-Create/Update a config file that specifies `wavefront` as output plugin
+Create a config file that specifies `wavefront` as output plugin and settings for other plugins.
 ```
 output {
     wavefront {
@@ -33,7 +33,7 @@ output {
 ```
 
 # Log Data Format
-Wavefront output plugin for Logstash can only process the log data as metric which is in below format
+The Wavefront output plugin for Logstash can process only events that have the following format:
 ```
 {
    "bytes" => {
@@ -47,7 +47,7 @@ Wavefront output plugin for Logstash can only process the log data as metric whi
    "message" => "I'm not a hash type, so I won't get sent."
  }
 ```
-Wavefront output plugin for Logstash generate below metrics out of the above log data and sends to Wavefront
+The Wavefront output plugin for Logstash generates the following metrics from the event and sends the metrics to Wavefront:
 ```
 logstash.bytes.count 200
 logstash.bytes.mean 42.2
@@ -67,14 +67,14 @@ Wavefront output plugin for Logstash also supports sending point tags for a metr
    "message" => "I'm not a hash type, so I won't get sent."
  }
 ```
-Below metrics are the output of the above log data
+Below metrics are the output of the above event:
 ```
 logstash.bytes.count 200 type=access region=mumbai
 logstash.bytes.mean 42.2 type=access region=mumbai
 logstash.error.count 123
 ```
 
-**Note:** Wavefront output plugin for Logstash has dropped out the `logstash.error.code` metric, as default `metrics` list only includes `count and mean`, to include the `code` metric you have to override the default `metrics` to `["count", "mean", "code"]`.
+**Note:** In this example the Wavefront output plugin has dropped the `logstash.error.code` metric because the default `metrics` list only includes `count` and `mean`. To include the `code` metric, override the default `metrics` to `["count", "mean", "code"]` in the `wavefront` output plugin.
 
 # Start The Service
 Start logstash and specify the configuration file with the -f flag.

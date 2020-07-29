@@ -2,13 +2,7 @@
 Wavefront Output Plugin for Logstash parse the log data and sends it as metrics to the Wavefront.
 
 # Installation
-### Install from Ruby Gem
-```
-gem install logstash-output-wavefront
-```
-
-### Install from Source
-To Install from source follow the below steps:
+Follow below instruction to install the plugin from source:
    1. Install ruby.
    2. Install ruby bundler -- `gem install bundler`.
    3. Clone this repository and `cd` to the directory.

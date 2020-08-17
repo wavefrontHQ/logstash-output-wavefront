@@ -62,7 +62,7 @@ class LogStash::Outputs::Wavefront < LogStash::Outputs::Base
   config :metrics, :validate => :array, :default => ["count", "mean"]
   # A special string to insert before every incoming metric before sending to
   # WF. May be blank, in which case we will use no special prefix.
-  config :prefix, :validate => :string, :default => ""
+  config :prefix, :validate => :string, :default => "logstash"
   # A special string that allows you to tag your outgoing metrics. For example,
   # the following event:
   # ----
@@ -104,6 +104,17 @@ class LogStash::Outputs::Wavefront < LogStash::Outputs::Base
     return true
   end
 
+  private
+  def report_health_status()
+    begin
+      @writer.write(1, "logstash.integration.status", {:point_tags => {}})
+    rescue Errno::EPIPE
+      @logger.error("Failed to report health status, connection to Wavefront agent dropped!")
+      @open = false
+      return
+    end
+  end
+
   public
   def receive(event)
     if not @open
@@ -114,6 +125,9 @@ class LogStash::Outputs::Wavefront < LogStash::Outputs::Base
         @open = true
       end
     end
+
+    # Send health status metric
+    report_health_status
 
     event.to_hash.each do |faux_metric_name, field_value|
       next if field_value.class != Hash
@@ -143,8 +157,7 @@ class LogStash::Outputs::Wavefront < LogStash::Outputs::Base
       field_value.each do |metric_specifier, metric_value|
         full_metric = "#{metric_name}.#{metric_specifier}"
         if @metrics.include? metric_specifier
-          full_metric_name =\
-            @prefix == "" ? full_metric : "#{@prefix}.#{full_metric}"
+          full_metric_name = "#{@prefix}.#{full_metric}"
           @logger.debug? && logger.debug(
               "Sending #{full_metric_name}=#{metric_value}: #{tags}")
           begin
